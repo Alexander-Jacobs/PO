@@ -128,13 +128,6 @@ function applyAction(action, direction) {
     greens[idx].points = data.points;
     return;
   }
-
-  if (action.type === "touch_red") {
-    if (doIt) redTouched.add(action.id);
-    else redTouched.delete(action.id);
-    return;
-  }
-
   if (action.type === "set_parked") {
     parkedInGarage = doIt ? action.next : action.prev;
 
@@ -142,6 +135,16 @@ function applyAction(action, direction) {
     state = doIt ? action.nextState : action.prevState;
     const shouldRun = doIt ? action.nextTimerRunning : action.prevTimerRunning;
     setTimerRunning(shouldRun);
+    return;
+  }
+  if (action.type === "toggle_red") {
+    if (doIt) {
+      if (action.next) redTouched.add(action.id);
+      else redTouched.delete(action.id);
+    } else {
+      if (action.prev) redTouched.add(action.id);
+      else redTouched.delete(action.id);
+    }
     return;
   }
 }
@@ -253,9 +256,18 @@ function setGreenOrientation(idx, orientation) {
 }
 
 function touchRed(id) {
-  if (redTouched.has(id)) return;
-  applyAction({ type:"touch_red", id }, "do");
-  pushAction({ type:"touch_red", id });
+  const prev = redTouched.has(id);
+  const next = !prev;
+
+  const action = {
+    type: "toggle_red",
+    id,
+    prev,
+    next
+  };
+
+  applyAction(action, "do");
+  pushAction(action);
   render();
 }
 
