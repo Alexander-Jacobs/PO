@@ -273,7 +273,7 @@
       return redTouched.size * 50;
     }
 
-    // Garage bonus: +100 als geparkeerd en nog tijd over
+    // Garage bonus: +100 als geparkeerd en nog tijd over 
     function computeGarageBonus() {
       return parkedInGarage && remaining > 0 ? 100 : 0;
     }
@@ -330,7 +330,7 @@
       }
     }
 
-    function undo() {
+    function undo() { //de undo buttom
       if (undoStack.length === 0) return;
       const action = undoStack.pop();
       applyAction(action, "undo");
@@ -338,7 +338,7 @@
       render();
     }
 
-    function redo() {
+    function redo() { //de redo buttom
       if (redoStack.length === 0) return;
       const action = redoStack.pop();
       applyAction(action, "do");
@@ -722,3 +722,4 @@
   </script>
 </body>
 </html>
+HELLO
